@@ -1,0 +1,49 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Product {
+  product_id  String @id @default(uuid())
+  title       String
+  description String
+  vendor_id   String
+  Vendor      Vendor @relation(fields: [vendor_id], references: [vendor_id])
+
+  @@map("products")
+}
+
+model UserProfile {
+  user_profile_id String @id @default(uuid())
+  user_id         String
+  User            User   @relation(fields: [user_id], references: [user_id])
+
+  @@map("user_profiles")
+}
+
+model User {
+  user_id     String        @id @default(uuid())
+  email       String        @unique
+  fullname    String
+  password    String
+  salt        String
+  status      Boolean       @default(true)
+  createdAt   DateTime      @default(now())
+  UserProfile UserProfile[]
+
+  @@map("users")
+}
+
+model Vendor {
+  vendor_id String    @id @default(uuid())
+  email     String    @unique
+  name      String?
+  Product   Product[]
+
+  @@map("vendors")
+}

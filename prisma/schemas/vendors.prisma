@@ -1,0 +1,8 @@
+model Vendor {
+    vendor_id String    @id @default(uuid())
+    email     String    @unique
+    name      String?
+    Product   Product[]
+
+    @@map("vendors")
+}

@@ -1,0 +1,11 @@
+model User {
+    user_id   String   @id @default(uuid())
+    email     String   @unique
+    fullname  String
+    password  String
+    salt      String
+    status    Boolean  @default(true)
+    createdAt DateTime @default(now())
+
+    @@map("users")
+}

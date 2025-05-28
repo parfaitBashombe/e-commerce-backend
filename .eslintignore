@@ -1,0 +1,7 @@
+node_modules
+coverage
+dist
+build
+.env
+src/__tests__
+src/__mocks__

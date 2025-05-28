@@ -1,0 +1,9 @@
+model Product {
+    product_id  String @id @default(uuid())
+    title       String
+    description String
+    vendor_id   String
+    Vendor      Vendor @relation(fields: [vendor_id], references: [vendor_id])
+
+    @@map("products")
+}

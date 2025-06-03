@@ -14,3 +14,9 @@ export type JwtPayload = {
   iat: number;
   exp: number;
 };
+
+export type LogIn = {
+  email: string;
+  fullname?: string;
+  password: string;
+};

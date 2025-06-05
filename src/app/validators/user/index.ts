@@ -5,6 +5,6 @@ import UpdateUserValidator from "@src/app/validators/user/validator-user-signin"
 const Signup = new SignupUserValidator();
 const SignIn = new SignInUserValidator();
 const Update = new UpdateUserValidator();
-const UserValidators = { Signup, SignIn };
+const UserValidators = { Signup, SignIn, Update };
 
 export default UserValidators;

@@ -1,6 +1,6 @@
 import CreateUserRoute from "@src/app/routes/user/route-user-create";
-import SignInUserRoute from "./route-user-login";
-import UpdateUserRoute from "./route-user-update";
+import SignInUserRoute from "@src/app/routes/user/route-user-login";
+import UpdateUserRoute from "@src/app/routes/user/route-user-update";
 
 const PATH = "/user/";
 

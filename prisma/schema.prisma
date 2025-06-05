@@ -42,8 +42,12 @@ model User {
 model Vendor {
   vendor_id String    @id @default(uuid())
   email     String    @unique
-  name      String?
+  fullname  String?
+  password  String
+  salt      String
   Product   Product[]
+  status    Boolean   @default(true)
+  createdAt DateTime  @default(now())
 
   @@map("vendors")
 }

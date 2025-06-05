@@ -1,7 +1,7 @@
 import BaseMiddleWare from "@src/core/base/base-middleware";
 import { Request, Response, NextFunction } from "express";
 
-class SignupUserValidator extends BaseMiddleWare {
+class UpdateUserValidator extends BaseMiddleWare {
   protected async middleware(
     req: Request,
     res: Response,
@@ -9,9 +9,9 @@ class SignupUserValidator extends BaseMiddleWare {
   ): Promise<void> {
     const schema = this.joi
       .object({
-        fullname: this.joi.string().required(),
-        email: this.joi.string().email().required(),
-        password: this.joi.string().min(6).required(),
+        fullname: this.joi.string(),
+        email: this.joi.string().email(),
+        password: this.joi.string().min(6),
       })
       .required();
 
@@ -19,4 +19,4 @@ class SignupUserValidator extends BaseMiddleWare {
   }
 }
 
-export default SignupUserValidator;
+export default UpdateUserValidator;

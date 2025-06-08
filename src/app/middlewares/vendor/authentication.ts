@@ -5,18 +5,20 @@ import { Request, Response, NextFunction } from "express";
 class VendorAuthentication extends BaseMiddleWare {
   protected async middleware(
     req: Request | any,
-    res: Response,
+    res: Response | any,
     next: NextFunction
   ): Promise<void> {
     const token = this.Utils.Token.extract(req);
 
     if (!token || token === "") {
       this.responseHandler(res, this.UNAUTHORIZED_CODE, this.UNAUTHORIZED_MSG);
+      return;
     }
     const decoded = this.Utils.Token.decode(token) as JwtPayload;
 
     if (!decoded) {
       this.responseHandler(res, this.UNAUTHORIZED_CODE, this.UNAUTHORIZED_MSG);
+      return;
     }
 
     const user = await this.Service.VendorServices.GetVendorByEmail.call(
@@ -25,6 +27,7 @@ class VendorAuthentication extends BaseMiddleWare {
 
     if (!user) {
       this.responseHandler(res, this.UNAUTHORIZED_CODE, this.UNAUTHORIZED_MSG);
+      return;
     }
 
     req.currentUser = user;

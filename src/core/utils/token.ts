@@ -20,7 +20,7 @@ export default class TokenUtils {
     }
 
     return isValidPayload
-      ? jwt.sign({ payload }, this.secret_key as string, { expiresIn: "1d" })
+      ? jwt.sign({ payload }, this.secret_key as string, { expiresIn: "7d" })
       : null;
   }
 

@@ -6,7 +6,7 @@ export type Signup = {
 
 export type JwtPayload = {
   payload: {
-    vendor_id: number;
+    vendor_id: string;
     name: string;
     email: string;
     createdAt: string;

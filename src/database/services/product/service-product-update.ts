@@ -3,7 +3,6 @@ import { Product } from "@src/generated/prisma";
 
 class UpdateProductService extends BaseService {
   protected async transaction(data: Product): Promise<null | Product> {
-    console.dir(data);
     const result = await this.database.product.update({
       where: { product_id: data.product_id },
       data: {

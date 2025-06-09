@@ -20,13 +20,13 @@ class UpdateUserRoute implements IRoute {
         Validators.Id.run(req, res, next),
 
       (req: Request, res: Response, next: NextFunction) =>
-        Validators.VendorValidators.Update.run(req, res, next),
+        Validators.ProductValidators.UpdateProduct.run(req, res, next),
 
       (req: Request, res: Response, next: NextFunction) =>
         MiddleWares.VendorMiddleWares.VendorAuth.run(req, res, next),
 
       (req: Request, res: Response) =>
-        Controllers.VendorControllers.Update.execute(req, res)
+        Controllers.ProductControllers.UpdateProduct.execute(req, res)
     );
   }
 }

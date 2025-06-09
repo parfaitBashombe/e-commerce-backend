@@ -17,9 +17,10 @@ class UpdateUserRoute implements IRoute {
   private initRoute(): void {
     this.router.route(`${this.path}update/:id`).put(
       (req: Request, res: Response, next: NextFunction) =>
+        Validators.Id.run(req, res, next),
+
+      (req: Request, res: Response, next: NextFunction) =>
         Validators.UserValidators.Update.run(req, res, next),
-      // (req: Request, res: Response, next: NextFunction) =>
-      //   MiddleWares.UserMiddleWares.CheckEmail.run(req, res, next),
 
       (req: Request, res: Response, next: NextFunction) =>
         MiddleWares.UserMiddleWares.UserAuth.run(req, res, next),

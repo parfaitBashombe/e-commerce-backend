@@ -12,11 +12,13 @@ class UserAuthentication extends BaseMiddleWare {
 
     if (!token || token === "") {
       this.responseHandler(res, this.UNAUTHORIZED_CODE, this.UNAUTHORIZED_MSG);
+      return;
     }
     const decoded = this.Utils.Token.decode(token) as JwtPayload;
 
     if (!decoded) {
       this.responseHandler(res, this.UNAUTHORIZED_CODE, this.UNAUTHORIZED_MSG);
+      return;
     }
 
     const user = await this.Service.UserServices.GetUserByEmail.call(
@@ -25,6 +27,7 @@ class UserAuthentication extends BaseMiddleWare {
 
     if (!user) {
       this.responseHandler(res, this.UNAUTHORIZED_CODE, this.UNAUTHORIZED_MSG);
+      return;
     }
 
     req.currentUser = user;

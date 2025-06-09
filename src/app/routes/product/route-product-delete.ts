@@ -4,7 +4,7 @@ import Controllers from "@src/app/controllers";
 import Validators from "@src/app/validators";
 import MiddleWares from "@src/app/middlewares";
 
-class UpdateUserRoute implements IRoute {
+class DeleteUserRoute implements IRoute {
   path: string;
   router;
 
@@ -15,20 +15,17 @@ class UpdateUserRoute implements IRoute {
   }
 
   private initRoute(): void {
-    this.router.route(`${this.path}update/:id`).put(
+    this.router.route(`${this.path}delete/:id`).delete(
       (req: Request, res: Response, next: NextFunction) =>
         Validators.Id.run(req, res, next),
-
-      (req: Request, res: Response, next: NextFunction) =>
-        Validators.VendorValidators.Update.run(req, res, next),
 
       (req: Request, res: Response, next: NextFunction) =>
         MiddleWares.VendorMiddleWares.VendorAuth.run(req, res, next),
 
       (req: Request, res: Response) =>
-        Controllers.VendorControllers.Update.execute(req, res)
+        Controllers.ProductControllers.DeleteProduct.execute(req, res)
     );
   }
 }
 
-export default UpdateUserRoute;
+export default DeleteUserRoute;

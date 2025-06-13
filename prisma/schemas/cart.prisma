@@ -1,0 +1,8 @@
+model Cart {
+    cart_id   String   @id @default(uuid())
+    createdAt DateTime @default(now())
+    user_id   String   @unique
+    User      User     @relation(fields: [user_id], references: [user_id])
+
+    @@map("carts")
+}

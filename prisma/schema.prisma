@@ -1,3 +1,25 @@
+model CartItem {
+  cart_item_id String   @id @default(uuid())
+  createdAt    DateTime @default(now())
+  quantity     Int
+  cart_id      String
+  Cart         Cart     @relation(fields: [cart_id], references: [cart_id])
+  product_id   String
+  Product      Product  @relation(fields: [product_id], references: [product_id])
+
+  @@map("cart-items")
+}
+
+model Cart {
+  cart_id   String     @id @default(uuid())
+  createdAt DateTime   @default(now())
+  user_id   String     @unique
+  User      User       @relation(fields: [user_id], references: [user_id])
+  CartItem  CartItem[]
+
+  @@map("carts")
+}
+
 generator client {
   provider = "prisma-client-js"
   output   = "../src/generated/prisma"
@@ -9,11 +31,12 @@ datasource db {
 }
 
 model Product {
-  product_id  String @id @default(uuid())
+  product_id  String     @id @default(uuid())
   title       String
   description String
   vendor_id   String
-  Vendor      Vendor @relation(fields: [vendor_id], references: [vendor_id])
+  Vendor      Vendor     @relation(fields: [vendor_id], references: [vendor_id])
+  CartItem    CartItem[]
 
   @@map("products")
 }
@@ -34,6 +57,7 @@ model User {
   salt        String
   status      Boolean       @default(true)
   createdAt   DateTime      @default(now())
+  Cart        Cart?
   UserProfile UserProfile[]
 
   @@map("users")

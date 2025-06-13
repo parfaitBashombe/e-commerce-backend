@@ -35,14 +35,24 @@ class App extends Base {
     });
 
     this.app.all("/", (req: Request, res: Response) => {
-      this.responseHandler(res, this.BAD_REQUEST_CODE, this.INVALID_METHOD_MSG);
-      return;
+      this.Utils.logger.error(this.BAD_REQUEST_MSG);
+
+      return this.responseHandler(
+        res,
+        this.BAD_REQUEST_CODE,
+        this.INVALID_METHOD_MSG
+      );
     });
 
     this.app.use("*", (req: Request, res: Response) => {
-      this.responseHandler(res, this.NOT_FOUND_CODE, this.INVALID_ROUTE_MSG);
+      this.Utils.logger.error(this.INVALID_ROUTE_MSG);
+
+      return this.responseHandler(
+        res,
+        this.NOT_FOUND_CODE,
+        this.INVALID_ROUTE_MSG
+      );
     });
-    return;
   }
 
   public listen(): void {

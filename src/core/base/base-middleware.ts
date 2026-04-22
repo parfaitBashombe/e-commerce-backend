@@ -1,23 +1,22 @@
 import { NextFunction, Request, Response } from "express";
-import joi, { Schema } from "joi";
+import { z, ZodSchema, ZodError } from "zod";
 
 import Base from "@src/core/base/base";
-import { JoiError } from "../interface/validator";
+import { ValidationError } from "../interface/validator";
 
-abstract class BaseMiddleWare extends Base implements JoiError {
-  protected joi = joi;
-  private options: any = { language: { key: "{{key}}" } };
+abstract class BaseMiddleWare extends Base implements ValidationError {
+  protected zod = z;
 
   protected bodyHandler(
     req: Request,
     res: Response,
     next: NextFunction,
-    schema: Schema
+    schema: ZodSchema
   ): Response | void {
-    const { error } = schema.validate(req.body, this.options);
+    const result = schema.safeParse(req.body);
 
-    if (error) {
-      return this.joiError(res, error);
+    if (!result.success) {
+      return this.validationError(res, result.error);
     }
     return next();
   }
@@ -26,12 +25,12 @@ abstract class BaseMiddleWare extends Base implements JoiError {
     req: Request,
     res: Response,
     next: NextFunction,
-    schema: Schema
+    schema: ZodSchema
   ): Response | void {
-    const { error } = schema.validate(req.params, this.options);
+    const result = schema.safeParse(req.params);
 
-    if (error) {
-      return this.joiError(res, error);
+    if (!result.success) {
+      return this.validationError(res, result.error);
     }
     return next();
   }
@@ -40,21 +39,32 @@ abstract class BaseMiddleWare extends Base implements JoiError {
     req: Request,
     res: Response,
     next: NextFunction,
-    schema: Schema
+    schema: ZodSchema
   ): Response | void {
-    const { error } = schema.validate(req.query, this.options);
+    const result = schema.safeParse(req.query);
 
-    if (error) {
-      return this.joiError(res, error);
+    if (!result.success) {
+      return this.validationError(res, result.error);
     }
     return next();
   }
 
-  joiError(res: Response, error: any): Response {
+  validationError(res: Response, error: any): Response {
+    if (error instanceof ZodError) {
+      return this.responseHandler(
+        res,
+        this.BAD_REQUEST_CODE,
+        "Validation Error",
+        error.flatten()
+      );
+    }
+    
+    // Fallback for non-Zod errors
+    const fallbackMessage = error?.details?.[0]?.message || "Validation Error";
     return this.responseHandler(
       res,
       this.BAD_REQUEST_CODE,
-      error.details[0].message.replace(/[^a-zA-Z0-9 ]/g, "")
+      fallbackMessage.replace(/[^a-zA-Z0-9 ._-]/g, "")
     );
   }
 

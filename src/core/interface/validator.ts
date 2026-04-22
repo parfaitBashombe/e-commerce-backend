@@ -1,5 +1,5 @@
 import { Response } from "express";
 
-export interface JoiError {
-  joiError(res: Response, error: any): Response;
+export interface ValidationError {
+  validationError(res: Response, error: any): Response;
 }

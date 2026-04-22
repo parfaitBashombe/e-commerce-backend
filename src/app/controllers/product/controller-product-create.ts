@@ -1,5 +1,5 @@
 import BaseControlller from "@src/core/base/base-controller";
-import { Product, User, Vendor } from "@src/generated/prisma";
+import { Product, Vendor } from "@src/generated/prisma";
 import { Request, Response } from "express";
 
 class CreateProductController extends BaseControlller {

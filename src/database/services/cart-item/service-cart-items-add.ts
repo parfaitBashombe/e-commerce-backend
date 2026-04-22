@@ -13,7 +13,7 @@ class AddCartItemService extends BaseService {
 
     const cartItem: CartItem = await this.database.cartItem.create({
       data: {
-        cart_id: cart.cart_id,
+        cart_id: data.cart_id,
         product_id: data.product_id,
         quantity: data.quantity,
       },
@@ -33,16 +33,17 @@ class AddProductToCartService extends BaseService {
    * @param quantity The quantity of the product to add. Defaults to 1.
    * @returns The updated or newly created cart item.
    */
-  protected async transaction(
-    userId: string,
-    productId: string,
-    quantity: number = 1
-  ): Promise<CartItem> {
+  protected async transaction(data: {
+    userId: string;
+    productId: string;
+    quantity?: number;
+  }): Promise<CartItem> {
+    const { userId, productId, quantity = 1 } = data;
     // 1. Find the user's cart. Since it's a one-to-one relationship (if it exists).
     let cart = await this.database.cart.findUnique({
       where: { user_id: userId },
       include: {
-        CartItems: {
+        CartItem: {
           where: { product_id: productId }, // Check if this product already exists in cart items
         },
       },
@@ -53,7 +54,7 @@ class AddProductToCartService extends BaseService {
     // If cart doesn't exist for the user, create one
     if (!cart) {
       console.log(`No cart found for user ${userId}. Creating a new cart.`);
-      cart = await this.database.cart.create({
+      const newCart = await this.database.cart.create({
         data: {
           user_id: userId,
         },
@@ -62,7 +63,7 @@ class AddProductToCartService extends BaseService {
       // Then, create the first cart item for this new cart
       cartItem = await this.database.cartItem.create({
         data: {
-          cart_id: cart.cart_id,
+          cart_id: newCart.cart_id,
           product_id: productId,
           quantity: quantity,
         },
@@ -70,7 +71,7 @@ class AddProductToCartService extends BaseService {
       console.log(`New cart created and product ${productId} added to it.`);
     } else {
       // Cart exists, now check if the product is already in this cart
-      const existingCartItem = cart.CartItems[0]; // Prisma's include filter gives an array
+      const existingCartItem = cart.CartItem[0]; // Prisma's include filter gives an array
 
       if (existingCartItem) {
         // Product already in cart, update its quantity

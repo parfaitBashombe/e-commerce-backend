@@ -7,13 +7,11 @@ class SignupVendorValidator extends BaseMiddleWare {
     res: Response,
     next: NextFunction
   ): Promise<void> {
-    const schema = this.joi
-      .object({
-        fullname: this.joi.string().required(),
-        email: this.joi.string().email().required(),
-        password: this.joi.string().min(6).required(),
-      })
-      .required();
+    const schema = this.zod.object({
+      fullname: this.zod.string(),
+      email: this.zod.string().email(),
+      password: this.zod.string().min(6),
+    });
 
     this.bodyHandler(req, res, next, schema);
   }

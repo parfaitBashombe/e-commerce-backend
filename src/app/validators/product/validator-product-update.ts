@@ -7,12 +7,10 @@ class UpdateProductValidator extends BaseMiddleWare {
     res: Response,
     next: NextFunction
   ): Promise<void> {
-    const schema = this.joi
-      .object({
-        title: this.joi.string(),
-        description: this.joi.string(),
-      })
-      .required();
+    const schema = this.zod.object({
+      title: this.zod.string().optional(),
+      description: this.zod.string().optional(),
+    });
 
     this.bodyHandler(req, res, next, schema);
   }

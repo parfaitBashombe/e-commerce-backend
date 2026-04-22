@@ -7,13 +7,11 @@ class UpdateVendorValidator extends BaseMiddleWare {
     res: Response,
     next: NextFunction
   ): Promise<void> {
-    const schema = this.joi
-      .object({
-        fullname: this.joi.string(),
-        email: this.joi.string().email(),
-        password: this.joi.string().min(6),
-      })
-      .required();
+    const schema = this.zod.object({
+      fullname: this.zod.string().optional(),
+      email: this.zod.string().email().optional(),
+      password: this.zod.string().min(6).optional(),
+    });
 
     this.bodyHandler(req, res, next, schema);
   }

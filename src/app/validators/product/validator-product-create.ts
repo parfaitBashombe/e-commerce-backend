@@ -7,12 +7,10 @@ class CreateProductValidator extends BaseMiddleWare {
     res: Response,
     next: NextFunction
   ): Promise<void> {
-    const schema = this.joi
-      .object({
-        title: this.joi.string().required(),
-        description: this.joi.string().required(),
-      })
-      .required();
+    const schema = this.zod.object({
+      title: this.zod.string(),
+      description: this.zod.string(),
+    });
 
     this.bodyHandler(req, res, next, schema);
   }

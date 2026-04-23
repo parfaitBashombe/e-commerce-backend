@@ -10,6 +10,8 @@ class CreateProductValidator extends BaseMiddleWare {
     const schema = this.zod.object({
       title: this.zod.string(),
       description: this.zod.string(),
+      price: this.zod.number().positive(),
+      stock: this.zod.number().int().nonnegative().optional(),
     });
 
     this.bodyHandler(req, res, next, schema);

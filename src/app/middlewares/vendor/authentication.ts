@@ -25,7 +25,7 @@ class VendorAuthentication extends BaseMiddleWare {
       decoded?.payload?.email
     );
 
-    if (!user) {
+    if (!user || user.status === "SUSPENDED") {
       this.responseHandler(res, this.UNAUTHORIZED_CODE, this.UNAUTHORIZED_MSG);
       return;
     }

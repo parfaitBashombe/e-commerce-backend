@@ -18,6 +18,7 @@ abstract class BaseMiddleWare extends Base implements ValidationError {
     if (!result.success) {
       return this.validationError(res, result.error);
     }
+    req.body = result.data;
     return next();
   }
 
@@ -32,6 +33,7 @@ abstract class BaseMiddleWare extends Base implements ValidationError {
     if (!result.success) {
       return this.validationError(res, result.error);
     }
+    req.params = result.data as any;
     return next();
   }
 
@@ -46,6 +48,7 @@ abstract class BaseMiddleWare extends Base implements ValidationError {
     if (!result.success) {
       return this.validationError(res, result.error);
     }
+    req.query = result.data as any;
     return next();
   }
 

@@ -10,7 +10,7 @@ class SiginVendorService extends BaseService {
       data.email
     );
 
-    if (!result) return null;
+    if (!result || result.status === "SUSPENDED") return null;
 
     const isPassword = this.Password.compare(
       data.password,

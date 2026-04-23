@@ -7,8 +7,6 @@ class UpdateProductService extends BaseService {
       where: { product_id: data.product_id },
       data: {
         ...data,
-        title: data.title,
-        description: data.description,
       },
     });
 

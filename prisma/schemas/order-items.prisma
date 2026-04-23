@@ -1,0 +1,14 @@
+model OrderItem {
+    order_item_id     String          @id @default(uuid())
+    order_id          String
+    Order             Order           @relation(fields: [order_id], references: [order_id])
+    product_id        String
+    Product           Product         @relation(fields: [product_id], references: [product_id])
+    vendor_id         String
+    Vendor            Vendor          @relation(fields: [vendor_id], references: [vendor_id])
+    quantity          Int
+    price_at_purchase Float
+    status            OrderItemStatus @default(PENDING)
+
+    @@map("order-items")
+}

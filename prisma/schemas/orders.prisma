@@ -1,0 +1,12 @@
+model Order {
+    order_id     String        @id @default(uuid())
+    user_id      String
+    User         User          @relation(fields: [user_id], references: [user_id])
+    total_amount Float
+    status       OrderStatus   @default(PENDING)
+    createdAt    DateTime      @default(now())
+    updatedAt    DateTime      @updatedAt
+    OrderItem    OrderItem[]
+
+    @@map("orders")
+}

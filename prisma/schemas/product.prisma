@@ -1,9 +1,13 @@
 model Product {
-    product_id  String @id @default(uuid())
+    product_id  String          @id @default(uuid())
     title       String
     description String
+    price       Float
+    stock       Int             @default(0)
+    status      ProductStatus   @default(PENDING)
     vendor_id   String
-    Vendor      Vendor @relation(fields: [vendor_id], references: [vendor_id])
+    Vendor      Vendor          @relation(fields: [vendor_id], references: [vendor_id])
+    OrderItem   OrderItem[]
 
     @@map("products")
 }

@@ -1,3 +1,15 @@
+model Admin {
+  admin_id  String   @id @default(uuid())
+  email     String   @unique
+  fullname  String
+  password  String
+  salt      String
+  status    Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  @@map("admins")
+}
+
 model CartItem {
   cart_item_id String   @id @default(uuid())
   createdAt    DateTime @default(now())
@@ -30,12 +42,69 @@ datasource db {
   url      = env("DB_URL")
 }
 
+enum VendorStatus {
+  PENDING
+  ACTIVE
+  SUSPENDED
+}
+
+enum ProductStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  CANCELLED
+}
+
+enum OrderItemStatus {
+  PENDING
+  PREPARING
+  SHIPPED
+  DELIVERED
+}
+
+model OrderItem {
+  order_item_id     String          @id @default(uuid())
+  order_id          String
+  Order             Order           @relation(fields: [order_id], references: [order_id])
+  product_id        String
+  Product           Product         @relation(fields: [product_id], references: [product_id])
+  vendor_id         String
+  Vendor            Vendor          @relation(fields: [vendor_id], references: [vendor_id])
+  quantity          Int
+  price_at_purchase Float
+  status            OrderItemStatus @default(PENDING)
+
+  @@map("order-items")
+}
+
+model Order {
+  order_id     String      @id @default(uuid())
+  user_id      String
+  User         User        @relation(fields: [user_id], references: [user_id])
+  total_amount Float
+  status       OrderStatus @default(PENDING)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  OrderItem    OrderItem[]
+
+  @@map("orders")
+}
+
 model Product {
-  product_id  String     @id @default(uuid())
+  product_id  String        @id @default(uuid())
   title       String
   description String
+  price       Float
+  stock       Int           @default(0)
+  status      ProductStatus @default(PENDING)
   vendor_id   String
-  Vendor      Vendor     @relation(fields: [vendor_id], references: [vendor_id])
+  Vendor      Vendor        @relation(fields: [vendor_id], references: [vendor_id])
+  OrderItem   OrderItem[]
   CartItem    CartItem[]
 
   @@map("products")
@@ -57,6 +126,7 @@ model User {
   salt        String
   status      Boolean       @default(true)
   createdAt   DateTime      @default(now())
+  Order       Order[]
   Cart        Cart?
   UserProfile UserProfile[]
 
@@ -64,14 +134,15 @@ model User {
 }
 
 model Vendor {
-  vendor_id String    @id @default(uuid())
-  email     String    @unique
+  vendor_id String       @id @default(uuid())
+  email     String       @unique
   fullname  String?
   password  String
   salt      String
   Product   Product[]
-  status    Boolean   @default(true)
-  createdAt DateTime  @default(now())
+  OrderItem OrderItem[]
+  status    VendorStatus @default(PENDING)
+  createdAt DateTime     @default(now())
 
   @@map("vendors")
 }

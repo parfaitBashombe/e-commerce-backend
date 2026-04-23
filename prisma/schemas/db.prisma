@@ -7,3 +7,28 @@ datasource db {
     provider = "postgresql"
     url      = env("DB_URL")
 }
+
+enum VendorStatus {
+    PENDING
+    ACTIVE
+    SUSPENDED
+}
+
+enum ProductStatus {
+    PENDING
+    APPROVED
+    REJECTED
+}
+
+enum OrderStatus {
+    PENDING
+    PAID
+    CANCELLED
+}
+
+enum OrderItemStatus {
+    PENDING
+    PREPARING
+    SHIPPED
+    DELIVERED
+}

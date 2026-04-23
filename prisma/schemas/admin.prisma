@@ -1,12 +1,11 @@
-model User {
-    user_id   String   @id @default(uuid())
+model Admin {
+    admin_id  String   @id @default(uuid())
     email     String   @unique
     fullname  String
     password  String
     salt      String
     status    Boolean  @default(true)
     createdAt DateTime @default(now())
-    Order     Order[]
 
-    @@map("users")
+    @@map("admins")
 }

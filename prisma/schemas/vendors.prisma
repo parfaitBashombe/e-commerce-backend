@@ -1,12 +1,13 @@
 model Vendor {
-    vendor_id String    @id @default(uuid())
-    email     String    @unique
+    vendor_id String        @id @default(uuid())
+    email     String        @unique
     fullname  String?
     password  String
     salt      String
     Product   Product[]
-    status    Boolean   @default(true)
-    createdAt DateTime  @default(now())
+    OrderItem OrderItem[]
+    status    VendorStatus  @default(PENDING)
+    createdAt DateTime      @default(now())
 
     @@map("vendors")
 }

@@ -99,3 +99,5 @@ class AddProductToCartService extends BaseService {
     return cartItem;
   }
 }
+
+export { AddProductToCartService };
